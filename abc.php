@@ -25,15 +25,15 @@ if ($link) {
             <table>
                 <tr>
                     <td>Name</td>
-                    <td><input type="text" name="name" required></td>
+                    <td><input type="text" name="name" ></td>
                 </tr>
                 <tr>
                     <td>City</td>
-                    <td><input type="text" name="city" required></td>
+                    <td><input type="text" name="city" ></td>
                 </tr>
                 <tr>
                     <td>Email</td>
-                    <td><input type="email" name="email" required></td>
+                    <td><input type="email" name="email" ></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center">
@@ -69,27 +69,45 @@ if ($link) {
         echo("Updated");
     }
 
-    if(isset($_POST["s4"]))
-    {
-        $res=mysqli_query($link, "select * from aat");
+    if (isset($_POST["s4"])) {
+        $res = mysqli_query($link, "SELECT * FROM aat");
         echo "<table border=1>";
-        echo "<tr><th>Name</th><th>City</th><th>Email</th></tr>";
+        echo "<tr>";
+        echo "<th>Name</th><th>City</th><th>Email</th>";
+        echo "</tr>";
         while ($row = mysqli_fetch_array($res)) {
-            echo "<tr><td>" . $row["name"] . "</td><td>" . $row["city"] . "</td><td>" . $row["email"] . "</td></tr>";
+            echo "<tr>";
+            echo "<td>" . $row["name"] . "</td>";
+            echo "<td>" . $row["city"] . "</td>";
+            echo "<td>" . $row["email"] . "</td>";
+            echo "</tr>";
         }
         echo "</table>";
     }
 
-    if(isset($_POST["s5"]))
-    {
-        $res=mysqli_query($link, "select * from aat where name='$_POST[name]' ");
-        echo "<table border=1>";
-        echo "<tr><th>Name</th><th>City</th><th>Email</th></tr>";
-        while ($row = mysqli_fetch_array($res)) {
-            echo "<tr><td>" . $row["name"] . "</td><td>" . $row["city"] . "</td><td>" . $row["email"] . "</td></tr>";
+    if (isset($_POST["s5"])) {
+        $res = mysqli_query($link, "SELECT * FROM aat WHERE name='$_POST[name]'");
+        
+        // Check if there are results
+        if (mysqli_num_rows($res) > 0) {
+            echo "<table border=1>";
+            echo "<tr>";
+            echo "<th>Name</th><th>City</th><th>Email</th>";
+            echo "</tr>";
+            
+            while ($row = mysqli_fetch_array($res)) {
+                echo "<tr>";
+                echo "<td>" . $row["name"] . "</td>";
+                echo "<td>" . $row["city"] . "</td>";
+                echo "<td>" . $row["email"] . "</td>";
+                echo "</tr>";
+            }
+            echo "</table>";
+        } else {
+            echo "No records found for the name '" . $_POST['name'] . "'.";
         }
-        echo "</table>";
     }
+    
 ?>
 
 
