@@ -15,7 +15,6 @@ if ($link) {
 }
 ?>
 
-
 <html>
     <head>
         <title>DBMS</title>
@@ -24,16 +23,20 @@ if ($link) {
         <form name="form1" action="" method="post">
             <table>
                 <tr>
+                    <td>ID</td>
+                    <td><input type="text" name="id"></td>
+                </tr>
+                <tr>
                     <td>Name</td>
-                    <td><input type="text" name="name" ></td>
+                    <td><input type="text" name="name"></td>
                 </tr>
                 <tr>
                     <td>City</td>
-                    <td><input type="text" name="city" ></td>
+                    <td><input type="text" name="city"></td>
                 </tr>
                 <tr>
                     <td>Email</td>
-                    <td><input type="email" name="email" ></td>
+                    <td><input type="email" name="email"></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center">
@@ -49,65 +52,61 @@ if ($link) {
     </body>
 </html>
 
-
 <?php
-    if(isset($_POST["s1"]))
-    {
-        mysqli_query($link, "insert into aat values('$_POST[name]','$_POST[city]','$_POST[email]')");
-        echo("Added");
-    }
+// Insert record
+if (isset($_POST["s1"])) {
+    mysqli_query($link, "INSERT INTO aat (name, city, email) VALUES ('$_POST[name]', '$_POST[city]', '$_POST[email]')");
+    echo "Record Added";
+}
 
-    if(isset($_POST["s2"]))
-    {
-        mysqli_query($link, "delete from aat where name='$_POST[name]' ");
-        echo("Deleted");
-    }
+// Delete record
+if (isset($_POST["s2"])) {
+    mysqli_query($link, "DELETE FROM aat WHERE id='$_POST[id]'");
+    echo "Record Deleted";
+}
 
-    if(isset($_POST["s3"]))
-    {
-        mysqli_query($link, "update aat set city='$_POST[city]' , `email`='$_POST[email]' where name='$_POST[name]'");
-        echo("Updated");
-    }
+// Update record
+if (isset($_POST["s3"])) {
+    mysqli_query($link, "UPDATE aat SET name='$_POST[name]', city='$_POST[city]', email='$_POST[email]' WHERE id='$_POST[id]'");
+    echo "Record Updated";
+}
 
-    if (isset($_POST["s4"])) {
-        $res = mysqli_query($link, "SELECT * FROM aat");
+// Display all records
+if (isset($_POST["s4"])) {
+    $res = mysqli_query($link, "SELECT * FROM aat");
+    echo "<table border=1>";
+    echo "<tr>";
+    echo "<th>ID</th><th>Name</th><th>City</th><th>Email</th>";
+    echo "</tr>";
+    while ($row = mysqli_fetch_array($res)) {
+        echo "<tr>";
+        echo "<td>" . $row["id"] . "</td>";
+        echo "<td>" . $row["name"] . "</td>";
+        echo "<td>" . $row["city"] . "</td>";
+        echo "<td>" . $row["email"] . "</td>";
+        echo "</tr>";
+    }
+    echo "</table>";
+}
+
+// Search record by name
+if (isset($_POST["s5"])) {
+    $res = mysqli_query($link, "SELECT * FROM aat WHERE id='$_POST[id]'");
+    if (mysqli_num_rows($res) > 0) {
         echo "<table border=1>";
         echo "<tr>";
-        echo "<th>Name</th><th>City</th><th>Email</th>";
+        echo "<th>ID</th><th>Name</th><th>City</th><th>Email</th>";
         echo "</tr>";
         while ($row = mysqli_fetch_array($res)) {
             echo "<tr>";
+            echo "<td>" . $row["id"] . "</td>";
             echo "<td>" . $row["name"] . "</td>";
             echo "<td>" . $row["city"] . "</td>";
             echo "<td>" . $row["email"] . "</td>";
-            echo "</tr>";
         }
         echo "</table>";
+    } else {
+        echo "No records found for the name '" . $_POST['name'] . "'.";
     }
-
-    if (isset($_POST["s5"])) {
-        $res = mysqli_query($link, "SELECT * FROM aat WHERE name='$_POST[name]'");
-        
-        // Check if there are results
-        if (mysqli_num_rows($res) > 0) {
-            echo "<table border=1>";
-            echo "<tr>";
-            echo "<th>Name</th><th>City</th><th>Email</th>";
-            echo "</tr>";
-            
-            while ($row = mysqli_fetch_array($res)) {
-                echo "<tr>";
-                echo "<td>" . $row["name"] . "</td>";
-                echo "<td>" . $row["city"] . "</td>";
-                echo "<td>" . $row["email"] . "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-        } else {
-            echo "No records found for the name '" . $_POST['name'] . "'.";
-        }
-    }
-    
+}
 ?>
-
-
